@@ -2,7 +2,7 @@ class PostReport < Struct.new(:word_count, :word_histogram)
   def self.generate(post)
     PostReport.new(
       # word count
-      post.content.split.map { |word| word.gsub(/\W/, '') }.count
+      post.content.split.map { |word| word.gsub(/\W/, '') }.count,
       # word_histogram
       calc_histogram(post)
     )
@@ -11,12 +11,12 @@ class PostReport < Struct.new(:word_count, :word_histogram)
   private
   
   def self.calc_histogram(post)
-    post
+    (post
       .content
       .split
       .map { |word| word.gsub(/\W/, '') }
       .map(&:downcase)
       .group_by { |word| word }
-      .transform_value(&:size)
+      .transform_values(&:size))
   end
 end
